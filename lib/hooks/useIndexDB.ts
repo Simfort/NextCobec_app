@@ -18,7 +18,7 @@ export default function useIndexDB() {
 
     openRequest.onerror = function (event) {
       const err =
-        event.target?.error ||
+        (event.target as unknown as { error: Error }).error ||
         new Error("Неизвестная ошибка открытия IndexedDB");
       console.error("Ошибка открытия БД:", err);
       setError(err);

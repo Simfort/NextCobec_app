@@ -1,4 +1,5 @@
 "use client";
+
 import useStageControllerDB from "@/lib/hooks/useStageControllerDB";
 import {
   AudioLines,
@@ -8,7 +9,7 @@ import {
   Send,
   TriangleAlert,
 } from "lucide-react";
-import Image from "next/image";
+
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,7 +26,7 @@ export default function InterviewSection() {
 
   const [progress, setProgress] = useState<number>(0); // прогресс в процентах
   const { addAll, clearAllData } = useStageControllerDB();
-  const recognitionRef = useRef<typeof window.SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const router = useRouter();
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -80,7 +81,10 @@ export default function InterviewSection() {
   }, []);
 
   const handleSpeech = (): void => {
-    const windowWithSpeech = window;
+    const windowWithSpeech = window as unknown as Window & {
+      SpeechRecognition: unknown;
+      webkitSpeechRecognition: unknown;
+    };
 
     // Проверяем поддержку SpeechRecognition
     if (
@@ -122,7 +126,9 @@ export default function InterviewSection() {
 
     // Обработчик успешного распознавания
     recognition.onresult = (event: SpeechRecognitionEvent): void => {
-      const transcript = event.results[0][0].transcript;
+      const transcript = (
+        event as unknown as { results: [[{ transcript: string }]] }
+      ).results[0][0].transcript;
       // Добавляем распознанный текст к существующему описанию
       setDescription((prev) => prev + " " + transcript);
 
