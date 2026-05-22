@@ -14,7 +14,7 @@ export default function ScreenSection() {
         muted
         loop
         className="w-full top-0 h-full shrink-0 object-cover object-center absolute"></video>
-      <div className="rounded-full px-5 py-2 relative overflow-hidden z-10 bg-primary/20 border-primary text-sm w-max text-primary border">
+      <div className="rounded-full px-5 py-2 flex items-center justify-center shrink-0 relative overflow-hidden z-10 bg-primary/20 border-primary text-sm w-max text-primary border">
         <p> ИИ ассистент</p>
         <motion.div
           initial={{ left: 0 }}

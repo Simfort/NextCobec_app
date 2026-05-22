@@ -60,7 +60,7 @@ export default function Final() {
   }
 
   return (
-    <section className="w-full gap-5 bg-accent min-h-screen py-20 flex flex-col items-center justify-center">
+    <section className="w-full gap-5 max-sm:px-5 bg-accent min-h-screen py-20 flex flex-col items-center justify-center">
       {result && result?.passed ? (
         <InterviewSuccess result={result} />
       ) : (

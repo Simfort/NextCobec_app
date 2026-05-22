@@ -32,13 +32,13 @@ export default function InterviewSuccess({
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="bg-background rounded-xl w-200 max-sm:w-80 max-h-200 max-sm:max-h-159 overflow-hidden  flex flex-col items-center">
+    <div className="bg-background rounded-xl w-200 max-sm:w-full  max-h-200  max-sm:max-h-159 overflow-hidden  flex flex-col items-center">
       {" "}
       <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="text-2xl flex bg-red-100 w-full max-sm:text-xl items-center justify-center py-2 text-danger  gap-3">
+        className="text-2xl flex bg-red-100 px-5 w-full max-sm:text-xl items-center justify-center py-2 text-danger  gap-3">
         Собеседование не пройдено <X size={50} className="max-sm:size-10" />
       </motion.h2>
       <div className="flex p-5 flex-col gap-2 items-center">

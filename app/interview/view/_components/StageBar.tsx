@@ -16,7 +16,7 @@ export default function StepBar({
   const { stages } = useStages();
   const isPhone = useIsPhone();
   return (
-    <section className="lg:px-20 max-sm:py-5 max-sm:fixed top-0 max-sm:bg-background max-sm:w-full max-sm:pr-10 max-sm:flex max-sm:justify-center">
+    <section className="lg:px-20 max-sm:py-5 max-sm:fixed z-10 top-0 max-sm:bg-background max-sm:w-full max-sm:pr-10 max-sm:flex max-sm:justify-center">
       <div className="grid grid-cols-[60px_1fr] max-sm:flex max-sm:items-center ">
         {stages.map((stage, index) => (
           <Fragment key={index}>

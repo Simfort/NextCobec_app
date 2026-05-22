@@ -177,7 +177,7 @@ export default function InterviewSection() {
     }
   };
   return (
-    <section className="h-screen flex flex-col py-20 gap-10 items-center justify-center">
+    <section className="h-screen flex flex-col py-20 gap-10 max-sm:px-5 items-center justify-center">
       {" "}
       <Leaf
         size={50}
@@ -187,7 +187,7 @@ export default function InterviewSection() {
       <AnimatePresence mode="wait">
         {" "}
         {isLoading ? (
-          <div>
+          <div className="px-5">
             <motion.h2
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -234,7 +234,7 @@ export default function InterviewSection() {
           </motion.h1>
         )}
       </AnimatePresence>
-      <div className="w-100 max-sm:w-80 flex flex-col gap-10">
+      <div className="w-100 max-sm:w-full flex flex-col gap-10">
         <div>
           <motion.div
             initial={{ y: 50, opacity: 0 }}
@@ -285,7 +285,7 @@ export default function InterviewSection() {
           exit={{ opacity: 0 }}
           transition={{ duration: 2 }}
           className="flex flex-col gap-5">
-          <h2 className="text-2xl text-center ">Инструкция</h2>
+          <h2 className="text-2xl text-xl text-center ">Инструкция</h2>
           <div className="flex gap-2">
             <MessageCircleWarning
               size={20}
