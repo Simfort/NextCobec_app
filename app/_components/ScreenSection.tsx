@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ScreenSection() {
   return (
-    <section className="flex font-bold h-screen text-background justify-center  py-50 relative z-10 items-center w-full flex-col gap-5 ">
+    <section className="flex font-bold h-screen text-background justify-center   py-50 relative z-10 items-center w-full flex-col gap-5 ">
       <div className="absolute inset-0 w-full h-full bg-secondary/80 z-9"></div>
       <video
         src="/teachvideo.mp4"

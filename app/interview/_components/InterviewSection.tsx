@@ -177,7 +177,7 @@ export default function InterviewSection() {
     }
   };
   return (
-    <section className="h-screen flex flex-col pt-20 gap-10 items-center justify-center">
+    <section className="h-screen flex flex-col py-20 gap-10 items-center justify-center">
       {" "}
       <Leaf
         size={50}
