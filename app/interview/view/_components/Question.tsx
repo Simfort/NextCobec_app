@@ -141,7 +141,11 @@ export default function Question({
         {index + 1}. {question.question}
       </h3>
       <div className="flex gap-1">
-        <p className="text-foreground/50 text-sm">Сложность:</p>
+        <p
+          aria-label={`Сложность ${question.rate} звезд`}
+          className="text-foreground/50 text-sm">
+          Сложность:
+        </p>
         {new Array(question.rate).fill(null).map((_, starIndex) => (
           <Star size={20} key={starIndex} fill="yellow" className="text-warn" />
         ))}
@@ -152,8 +156,17 @@ export default function Question({
             disabled={question.answerUser ? true : false}
             value={answer}
             onChange={handleChange}
-            name=""
-            id=""
+            aria-required
+            aria-label="Напишите ответ на вопрос"
+            onKeyDown={(e) => {
+              if (
+                e.key === "Enter" &&
+                !e.shiftKey &&
+                (!isListening || answer)
+              ) {
+                handleNext();
+              }
+            }}
             className="w-full h-34.5 resize-none outline-0"
             placeholder="Ответ на вопрос"
           />
@@ -197,7 +210,6 @@ export default function Question({
             height="200px"
             className="max-sm:w-full"
             theme={githubLight}
-            readOnly={question.answerUser ? true : false}
             extensions={[javascript({ jsx: true }), lineNumbers()]}
             onChange={(value) => setAnswer(value)}
           />{" "}
@@ -224,7 +236,10 @@ export default function Question({
             </button>
           </div>
           {error && (
-            <div className="bg-red-200 mt-2 p-2 flex items-center gap-2 shadow rounded-md">
+            <div
+              aria-live="assertive"
+              role="alert"
+              className="bg-red-200 mt-2 p-2 flex items-center gap-2 shadow rounded-md">
               <TriangleAlert
                 size={20}
                 className="shrink-0 text-red-500 rotate-y-180"
@@ -239,8 +254,9 @@ export default function Question({
           size={20}
           className="text-warn shrink-0 rotate-y-180"
         />
-        <p className="text-foreground/40  ">
-          После нажатия кнопки `дальшe` нельзя будет изменить свой ответ
+        <p className="text-foreground/40 ">
+          После нажатия кнопки `дальшe` или нажатии `Enter` на вашей клавиатуре
+          , нельзя будет изменить свой ответ
         </p>
       </div>
     </motion.div>

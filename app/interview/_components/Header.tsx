@@ -4,10 +4,16 @@ import { useIsPhone } from "@/lib/hooks/useWindowMedia";
 
 import Link from "next/link";
 import BurgerMenu from "./BurgerMenu";
+import { useEffect, useState } from "react";
 
 export default function Header() {
-  const isPhone = useIsPhone();
+  const [isMount, setIsMount] = useState(false);
+  const isPhone = useIsPhone(); // Для SSR, но не для логики
 
+  useEffect(() => {
+    setIsMount(true);
+  }, []);
+  if (!isMount) return null;
   if (isPhone)
     return (
       <header className="flex h-20 py-5 z-20  text-foreground   fixed top-0 w-full pr-5 font-bold justify-end">

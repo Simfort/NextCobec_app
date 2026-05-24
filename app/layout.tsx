@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import Footer from "./_components/Footer";
+import Provider from "./Provider";
 
 const geistSans = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -101,7 +102,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${geistSans.variable} h-full antialiased`}>
       <body>
-        {children}
+        <Provider>{children}</Provider>
         <Footer />
       </body>
     </html>

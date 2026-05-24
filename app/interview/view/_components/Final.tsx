@@ -2,36 +2,52 @@
 import { ResultInterview } from "@/lib/types";
 import { useStages } from "@/store/useStages";
 import { motion } from "framer-motion";
-import { Loader } from "lucide-react";
+import { Loader, WifiOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import InterviewSuccess from "./IntrerviewSuccess";
 import InterviewFailed from "./InterviewFailed";
+import useStatusNetwork from "@/lib/hooks/useStatusNetwork";
 
 export default function Final() {
   const { stages } = useStages();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ResultInterview | null>(null);
+  const isOffline = useStatusNetwork();
 
   useEffect(() => {
-    const getResultFinal = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/interview/result", {
-          method: "POST",
+    if (!isOffline) {
+      const getResultFinal = async () => {
+        setLoading(true);
+        try {
+          const res = await fetch("/api/interview/result", {
+            method: "POST",
 
-          body: JSON.stringify({ stages: stages }),
-        });
-        const data: ResultInterview = await res.json();
-        setResult(data);
-        localStorage.setItem("last_passed", String(data.passed));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getResultFinal();
-  }, []);
+            body: JSON.stringify({ stages: stages }),
+          });
+          const data: ResultInterview = await res.json();
+          setResult(data);
+          localStorage.setItem("last_passed", String(data.passed));
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      getResultFinal();
+    }
+  }, [isOffline]);
+
+  if (isOffline) {
+    return (
+      <section className="w-full bg-accent min-h-screen py-20 flex flex-col items-center justify-center gap-8">
+        <WifiOff size={50} className="shrink-0 text-red-500 " />
+        <h2 className="text-3xl font-semibold text-center">
+          Вы в оффлайн режиме
+        </h2>
+        <p className="text-foreground/50">Вычисление результатов недоступно</p>
+      </section>
+    );
+  }
   if (loading) {
     return (
       <section className="w-full bg-accent min-h-screen py-20 flex flex-col items-center justify-center gap-8">

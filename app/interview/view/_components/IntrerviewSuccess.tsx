@@ -1,7 +1,7 @@
 "use client";
 import { ResultInterview } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -38,15 +38,19 @@ export default function InterviewSuccess({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="text-2xl flex bg-red-100 px-5 w-full max-sm:text-xl items-center justify-center py-2 text-danger  gap-3">
-        Собеседование не пройдено <X size={50} className="max-sm:size-10" />
+        className="text-2xl flex bg-green-100 px-5 w-full max-sm:text-xl items-center justify-center py-2 text-primary  gap-3">
+        Собеседование не пройдено <Check size={50} className="max-sm:size-10" />
       </motion.h2>
       <div className="flex p-5 flex-col gap-2 items-center">
-        <div className="rounded-full border-danger border size-30 flex items-center justify-center">
-          <p className="text-danger text-5xl">{percent}%</p>
+        <div className="rounded-full border-primary border size-30 flex items-center justify-center">
+          <p className="text-primary text-5xl">{percent}%</p>
         </div>
         <p className="text-sm text-foreground/50">Правильность ответов</p>
       </div>
+      <p className="py-5">
+        Ваша зарабатная плата -{" "}
+        <span className="text-primary">{result.salary} рублей</span>{" "}
+      </p>
       <button
         onClick={() => setOpen(!open)}
         className="flex gap-2 w-full bg-accent/50 justify-center py-2 border-accent border-y-2 cursor-pointer hover:opacity-50 active:opacity-40 transition-opacity">
@@ -58,7 +62,7 @@ export default function InterviewSuccess({
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            className="flex  flex-col px-5 pt-2 overflow-y-auto overflow-x-hidden  gap-10">
+            className="flex  flex-col px-5 py-2 overflow-y-auto overflow-x-hidden  gap-10">
             <div className="flex flex-col gap-10">
               {result.answer.map((answer, index) => (
                 <div key={index} className="max-sm:w-80">

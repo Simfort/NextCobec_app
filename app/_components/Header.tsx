@@ -5,14 +5,14 @@ import BurgerMenu from "./BurgerMenu";
 import { useState, useEffect } from "react";
 
 export default function Header() {
-  const [isPhoneClient, setIsPhoneClient] = useState(false);
-  const isPhoneServer = useIsPhone(); // Для SSR, но не для логики
+  const [isMount, setIsMount] = useState(false);
+  const isPhone = useIsPhone(); // Для SSR, но не для логики
 
   useEffect(() => {
-    setIsPhoneClient(isPhoneServer);
-  }, [isPhoneServer]);
-
-  if (isPhoneClient) {
+    setIsMount(true);
+  }, []);
+  if (!isMount) return null;
+  if (isPhone) {
     return (
       <header className="flex h-20 py-5 z-20 text-background fixed top-0 w-full pr-5 font-bold justify-end">
         <BurgerMenu />

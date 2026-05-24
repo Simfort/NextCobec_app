@@ -28,7 +28,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="flex flex-col  items-center">
+    <main className="flex flex-col min-h-screen items-center">
       <InterviewSection />
     </main>
   );

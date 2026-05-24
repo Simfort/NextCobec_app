@@ -8,12 +8,14 @@ import {
   Pause,
   Send,
   TriangleAlert,
+  WifiOff,
 } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import useStatusNetwork from "@/lib/hooks/useStatusNetwork";
 
 const textLoading = "...".split("");
 const textStart = "Начните".split("");
@@ -28,58 +30,7 @@ export default function InterviewSection() {
   const { addAll, clearAllData } = useStageControllerDB();
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const router = useRouter();
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    setProgress(0);
-
-    if (!description) {
-      setError("Вы не написали описание!");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      // Этап 1: очистка данных (10%)
-
-      setProgress(10);
-      await clearAllData();
-
-      // Этап 2: запрос к API (30%)
-      setProgress(30);
-      const res = await fetch("/api/interview", {
-        method: "POST",
-        body: JSON.stringify({ description }),
-      });
-
-      const data = await res.json();
-      console.log(data);
-      setProgress(50);
-      // Этап 3: добавление данных в БД (50%)
-
-      await addAll(data);
-      localStorage.setItem("last_interview", description);
-      // Завершение (100%)
-      setProgress(100);
-      router.push("/interview/view");
-    } catch (error) {
-      console.error(error);
-      setError("Произошла ошибка при создании собеседования");
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-        setProgress(0);
-      }, 2000);
-    }
-  };
-  // Очистка при размонтировании
-  useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []);
-
+  const isOffline = useStatusNetwork();
   const handleSpeech = (): void => {
     const windowWithSpeech = window as unknown as Window & {
       SpeechRecognition: unknown;
@@ -176,9 +127,68 @@ export default function InterviewSection() {
       setError("Не удалось запустить распознавание речи");
     }
   };
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    setProgress(0);
+
+    if (!description) {
+      setError("Вы не написали описание!");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Этап 1: очистка данных (10%)
+
+      setProgress(10);
+      await clearAllData();
+
+      // Этап 2: запрос к API (30%)
+      setProgress(30);
+      const res = await fetch("/api/interview", {
+        method: "POST",
+        body: JSON.stringify({ description }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      setProgress(50);
+      // Этап 3: добавление данных в БД (50%)
+
+      await addAll(data);
+      localStorage.setItem("last_interview", description);
+      // Завершение (100%)
+      setProgress(100);
+      router.push("/interview/view");
+    } catch (error) {
+      console.error(error);
+      setError("Произошла ошибка при создании собеседования");
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+        setProgress(0);
+      }, 2000);
+    }
+  };
+  // Очистка при размонтировании
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
   return (
-    <section className="h-screen flex flex-col py-20 gap-10 max-sm:px-5 items-center justify-center">
-      {" "}
+    <section className="h-full flex flex-col py-20 gap-10 max-sm:px-5 items-center justify-center">
+      {isOffline && (
+        <div className="bg-red-200 p-2 flex items-center gap-2  shadow rounded-md">
+          <WifiOff size={20} className="shrink-0 text-red-500 " />
+          <p className="text-red-900 font-bold">
+            Вы в оффлайн режиме.Создание собеседования недоступно
+          </p>
+        </div>
+      )}
       <Leaf
         size={50}
         fill="green"
@@ -243,10 +253,16 @@ export default function InterviewSection() {
             transition={{ duration: 0.5 }}
             className="bg-accent shadow-md shadow-[#00000043]  p-2.5  flex flex-col rounded-md">
             <textarea
+              disabled={isOffline}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  handleSubmit();
+                }
+              }}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              name=""
-              id=""
+              aria-describedby="description-interview"
+              aria-label="Напишите описание собеседования"
               className="w-full h-34.5 resize-none outline-0"
               placeholder="Описание собеседования"
             />
@@ -254,6 +270,8 @@ export default function InterviewSection() {
               <button
                 disabled={isLoading}
                 onClick={handleSpeech}
+                aria-disabled={isLoading}
+                aria-label="Записать микрофон"
                 className="text-primary disabled:text-accent transition-all not-disabled:cursor-pointer not-disabled:active:opacity-50 not-disabled:hover:opacity-40 bg-foreground/5 p-2 rounded-full">
                 {isListening ? (
                   <Pause size={20} className="text-blue-500" />
@@ -264,6 +282,8 @@ export default function InterviewSection() {
               <button
                 disabled={isLoading}
                 onClick={handleSubmit}
+                aria-disabled={isLoading}
+                aria-label="Отправить собеседование"
                 className="text-primary disabled:text-accent  transition-all  not-disabled:cursor-pointer not-disabled:active:opacity-50 not-disabled:hover:opacity-40 bg-foreground/5 p-2 rounded-full">
                 <Send size={20} />
               </button>
@@ -271,7 +291,10 @@ export default function InterviewSection() {
           </motion.div>
         </div>
         {error && (
-          <div className="bg-red-200 p-2 flex items-center gap-2 shadow rounded-md">
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="bg-red-200 p-2 flex items-center gap-2 shadow rounded-md">
             <TriangleAlert
               size={20}
               className="shrink-0 text-red-500 rotate-y-180"
@@ -285,13 +308,13 @@ export default function InterviewSection() {
           exit={{ opacity: 0 }}
           transition={{ duration: 2 }}
           className="flex flex-col gap-5">
-          <h2 className="text-2xl text-xl text-center ">Инструкция</h2>
+          <h2 className="text-2xl max-sm:text-xl text-center ">Инструкция</h2>
           <div className="flex gap-2">
             <MessageCircleWarning
               size={20}
               className="shrink-0 text-warn rotate-y-180"
             />
-            <p className="text-foreground/80">
+            <p id="description-interview" className="text-foreground/80">
               Напишите описание собеседование.В описание пишите,какие вопросы
               хотите видеть и на какой теме сделать акцент.Затем нейросеть
               создаст программу собеседования.В программе будут вопросы в ходе

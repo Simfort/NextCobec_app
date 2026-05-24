@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "./_components/Header";
 import ScreenSection from "./_components/ScreenSection";
 

@@ -12,7 +12,7 @@ export default function ProgressBar({ progress }: { progress: number }) {
       className="w-full max-w-md mx-auto flex  gap-2 mt-4">
       <LoaderCircle className="text-primary animate-spin" />
 
-      <div className="relative w-full pt-1">
+      <div role="progressbar" className="relative w-full pt-1">
         <div className="overflow-hidden h-2 text-xs flex rounded-full bg-gray-200">
           <div
             style={{ width: `${progress}%` }}
