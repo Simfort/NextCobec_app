@@ -31,6 +31,7 @@ export default function InterviewSection() {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const router = useRouter();
   const isOffline = useStatusNetwork();
+
   const handleSpeech = (): void => {
     const windowWithSpeech = window as unknown as Window & {
       SpeechRecognition: unknown;
@@ -170,6 +171,7 @@ export default function InterviewSection() {
       }, 2000);
     }
   };
+
   // Очистка при размонтировании
   useEffect(() => {
     return () => {
@@ -180,7 +182,7 @@ export default function InterviewSection() {
   }, []);
 
   return (
-    <section className="h-full flex flex-col py-20 gap-10 max-sm:px-5 items-center justify-center">
+    <section className="grow shrink-0 flex flex-col py-20 gap-10 max-sm:px-5 items-center justify-center">
       {isOffline && (
         <div className="bg-red-200 p-2 flex items-center gap-2  shadow rounded-md">
           <WifiOff size={20} className="shrink-0 text-red-500 " />

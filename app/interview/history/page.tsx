@@ -27,7 +27,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="flex font-bold flex-col pt-20 max-sm:pt-10 min-h-screen items-center">
+    <main className="flex font-bold  flex-col pt-20 max-sm:pt-10 min-h-screen items-center">
       <HistorySection />
     </main>
   );

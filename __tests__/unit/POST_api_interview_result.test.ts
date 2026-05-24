@@ -19,17 +19,25 @@ describe("POST /api/interview/result", () => {
   });
   it("should return content when stages required", async () => {
     const mockCompletionContent = JSON.stringify({
-      answer: [
+      stages: [
         {
-          question: "What is a closure in JavaScript?",
-          answer:
-            "A closure is a function that retains access to its outer function’s variables",
-          answerUser:
-            "A closure is a function that retains access to its outer function’s variables",
-          success: true,
+          id: 0,
+          stage: "Creating code",
+          questions: [
+            {
+              id: 0,
+              question: "What is a closure in JavaScript?",
+              answer:
+                "A closure is a function that retains access to its outer function’s variables",
+              type: "common",
+              rate: 2,
+              answerUser:
+                "A closure is a function that retains access to its outer function’s variables",
+            },
+          ],
         },
       ],
-      salary: 1000,
+      salary: 5000,
       passed: true,
     });
     (mockOpenai.default.chat.completions.create as Mock).mockResolvedValue({
@@ -67,6 +75,7 @@ describe("POST /api/interview/result", () => {
 
     const response = await POST(req);
     const data = await response.json();
+    console.log(data);
     expect(response.status).toBe(200);
     expect(data).toEqual(JSON.parse(mockCompletionContent));
     expect(mockOpenai.default.chat.completions.create).toHaveBeenCalled();

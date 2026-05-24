@@ -65,6 +65,7 @@ export default function useIndexDB() {
         questionsStore.createIndex("answerUser", "answerUser", {
           unique: false,
         });
+        questionsStore.createIndex("passed", "passed", { unique: false });
       }
     };
 

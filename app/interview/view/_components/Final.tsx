@@ -7,15 +7,29 @@ import { useEffect, useState } from "react";
 import InterviewSuccess from "./IntrerviewSuccess";
 import InterviewFailed from "./InterviewFailed";
 import useStatusNetwork from "@/lib/hooks/useStatusNetwork";
+import useStageControllerDB from "@/lib/hooks/useStageControllerDB";
 
 export default function Final() {
-  const { stages } = useStages();
+  const { stages, setStages } = useStages();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ResultInterview | null>(null);
   const isOffline = useStatusNetwork();
-
+  const { addAll, clearAllData, isDBReady } = useStageControllerDB();
+  console.log(result);
   useEffect(() => {
-    if (!isOffline) {
+    if (!isOffline && isDBReady) {
+      if (!window) return;
+      const lastPassed = localStorage.getItem("last_passed");
+      const lastSalary = localStorage.getItem("last_salary");
+
+      if (lastPassed && lastSalary && stages.length) {
+        setResult({
+          stages: stages,
+          salary: parseInt(lastSalary),
+          passed: JSON.parse(lastPassed),
+        });
+        return;
+      }
       const getResultFinal = async () => {
         setLoading(true);
         try {
@@ -25,8 +39,13 @@ export default function Final() {
             body: JSON.stringify({ stages: stages }),
           });
           const data: ResultInterview = await res.json();
+          console.log(data);
           setResult(data);
+          await clearAllData();
+          await addAll(data.stages);
+          setStages(data.stages);
           localStorage.setItem("last_passed", String(data.passed));
+          localStorage.setItem("last_salary", String(data.salary));
         } catch (error) {
           console.error(error);
         } finally {
@@ -35,7 +54,9 @@ export default function Final() {
       };
       getResultFinal();
     }
-  }, [isOffline]);
+  }, [isOffline, isDBReady]);
+
+  useEffect(() => {}, [stages]);
 
   if (isOffline) {
     return (

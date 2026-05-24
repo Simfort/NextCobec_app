@@ -1,12 +1,6 @@
 const CACHE_NAME = "v1";
 // Оставляем только гарантированно статичные ресурсы с фиксированными путями
-const PRECACHE_PATHS = [
-  "/teachvideo.mp4",
-  "/",
-  "/interview",
-  "/interview/history",
-  "/clever.png",
-];
+const PRECACHE_PATHS = ["/teachvideo.mp4", "clever.png"];
 
 async function putInCache(req, res) {
   // Пропускаем запросы, которые нельзя кэшировать (например, от расширений браузера)

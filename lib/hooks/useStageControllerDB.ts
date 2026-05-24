@@ -66,7 +66,11 @@ export default function useStageControllerDB() {
 
           for (const question of stage.questions) {
             try {
-              await addQuestion(stageId, { ...question, answerUser: "" });
+              await addQuestion(stageId, {
+                ...question,
+                answerUser: "",
+                passed: null,
+              });
               results.questionsAdded++;
             } catch (questionError) {
               const errorMsg =

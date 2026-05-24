@@ -14,14 +14,14 @@ export default function Header() {
   if (!isMount) return null;
   if (isPhone) {
     return (
-      <header className="flex h-20 py-5 z-20 text-background fixed top-0 w-full pr-5 font-bold justify-end">
+      <header className="flex h-20 py-5 z-20 text-background  top-0 absolute w-full pr-5 font-bold justify-end">
         <BurgerMenu />
       </header>
     );
   }
 
   return (
-    <header className="flex h-20 py-5 z-20 text-background fixed top-0 w-full items-center font-bold justify-around">
+    <header className="flex h-20 py-5  z-20 text-background top-0 absolute w-full items-center font-bold justify-around">
       <h2 className="font-host-grotesk text-2xl">
         Next<span className="text-primary">Cobec</span>
       </h2>

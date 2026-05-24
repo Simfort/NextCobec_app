@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary text-primary-foreground py-16 px-6">
+    <footer className="bg-secondary text-[#B5EAD7] font-bold py-5 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {/* Логотип и соцсети */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
@@ -30,20 +30,20 @@ export default function Footer() {
                 width={36}
                 height={36}
                 src="/githubIcon.svg"
-                className="rounded-full"
+                className="rounded-full bg-white"
                 alt="GitHub icon"
               />
             </a>
           </div>
-          <p className="text-primary/80 text-sm max-w-[200px]">
+          <p className=" text-sm max-w-[200px]">
             Следите за нами в соцсетях — всегда на связи!
           </p>
         </div>
 
         {/* Контакты */}
         <div className="flex flex-col items-center md:items-start">
-          <h5 className="text-xl font-medium mb-6 text-primary">Контакты</h5>
-          <ul className="space-y-4 text-primary/90">
+          <h5 className="text-xl mb-6 ">Контакты</h5>
+          <ul className="space-y-4">
             <li>
               <a
                 href="mailto:lemondzavadavid265@gmail.com"
@@ -67,15 +67,13 @@ export default function Footer() {
         </div>
 
         {/* Юридические ссылки */}
-        <div className="flex flex-col items-center md:items-start">
-          <h5 className="text-xl font-medium mb-6 text-primary">
-            Юридическая информация
-          </h5>
+        <div className="flex flex-col items-center  md:items-start">
+          <h5 className="text-xl  mb-6 ">Юридическая информация</h5>
           <ul className="space-y-3">
             <li>
               <Link
                 href="/interview/ps"
-                className="text-primary/90 hover:text-primary transition-colors duration-300 flex items-center group">
+                className=" hover:text-primary transition-colors duration-300 flex items-center group">
                 <span className="w-1.5 h-1.5 bg-primary/40 rounded-full mr-3 group-hover:bg-primary transition-colors duration-300"></span>
                 Пользовательское соглашение
               </Link>
@@ -83,7 +81,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/interview/pk"
-                className="text-primary/90 hover:text-primary transition-colors duration-300 flex items-center group">
+                className=" hover:text-primary transition-colors duration-300 flex items-center group">
                 <span className="w-1.5 h-1.5 bg-primary/40 rounded-full mr-3 group-hover:bg-primary transition-colors duration-300"></span>
                 Политика конфиденциальности
               </Link>
@@ -93,7 +91,7 @@ export default function Footer() {
       </div>
 
       {/* Нижняя панель */}
-      <div className="mt-12 pt-6 border-t border-primary/20 text-center text-primary/60 text-sm">
+      <div className="mt-12 pt-6 border-t border-primary/20 text-center text-sm">
         <p>NextCobec © {new Date().getFullYear()}. Все права защищены.</p>
       </div>
     </footer>

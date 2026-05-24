@@ -5,6 +5,7 @@ export type Question = {
   type: "common" | "code" | "select";
   rate: 2;
   answerUser: string;
+  passed: null | boolean;
 };
 export type OnlyStage = {
   id: number;
@@ -15,14 +16,9 @@ export type UseStages = {
   stages: Stage[];
   setStages: (arg: Stage[]) => void;
 };
-export type ResultAnswer = {
-  question: string;
-  answerUser: string;
-  answer: string;
-  success: boolean;
-};
+
 export type ResultInterview = {
-  answer: ResultAnswer[];
+  stages: Stage[];
   passed: boolean;
   salary: number;
 };

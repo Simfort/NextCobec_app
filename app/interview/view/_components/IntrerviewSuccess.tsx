@@ -11,8 +11,9 @@ export default function InterviewSuccess({
   result: ResultInterview;
 }) {
   const [open, setOpen] = useState(false);
-  const rightAnswers = result.answer.reduce((a, b) => {
-    if (b.success) {
+  const answers = result.stages.flatMap((stage) => stage.questions);
+  const rightAnswers = answers.reduce((a, b) => {
+    if (b.passed) {
       return a + 1;
     } else {
       return a;
@@ -21,7 +22,7 @@ export default function InterviewSuccess({
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
-    const percentEnd = Math.round((rightAnswers / result.answer.length) * 100);
+    const percentEnd = Math.round((rightAnswers / answers.length) * 100);
     const interval = setInterval(() => {
       setPercent((prev) => {
         if (prev < percentEnd) return prev + 1;
@@ -39,7 +40,7 @@ export default function InterviewSuccess({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
         className="text-2xl flex bg-green-100 px-5 w-full max-sm:text-xl items-center justify-center py-2 text-primary  gap-3">
-        Собеседование не пройдено <Check size={50} className="max-sm:size-10" />
+        Собеседование пройдено <Check size={50} className="max-sm:size-10" />
       </motion.h2>
       <div className="flex p-5 flex-col gap-2 items-center">
         <div className="rounded-full border-primary border size-30 flex items-center justify-center">
@@ -64,13 +65,13 @@ export default function InterviewSuccess({
             exit={{ height: 0 }}
             className="flex  flex-col px-5 py-2 overflow-y-auto overflow-x-hidden  gap-10">
             <div className="flex flex-col gap-10">
-              {result.answer.map((answer, index) => (
+              {answers.map((answer, index) => (
                 <div key={index} className="max-sm:w-80">
                   <h4>
                     {index + 1}.{answer.question}
                   </h4>
                   <div className="bg-accent p-2 rounded-md">
-                    {answer.success ? (
+                    {answer.passed ? (
                       <p className="text-primary text-sm">
                         {" "}
                         + {answer.answerUser}

@@ -23,12 +23,9 @@ export default function HistorySection() {
         const descriptionStorage = localStorage.getItem("last_interview");
         const passedStorage = localStorage.getItem("last_passed");
 
-        if (passedStorage) {
-          setPassed(Boolean(passedStorage));
-        }
         if (descriptionStorage) {
           setDescription(descriptionStorage);
-
+          if (passedStorage) setPassed(JSON.parse(passedStorage));
           getAllStages()
             .then((stages) => setStages(stages))
             .catch((err) => console.error(err));
@@ -43,7 +40,7 @@ export default function HistorySection() {
 
   if (!stages.length) {
     return (
-      <section className="py-12 px-4">
+      <section className="py-12 px-4 flex items-center justify-center flex-col">
         <div className="max-w-2xl mx-auto text-center">
           <AppWindowMac className="w-16 h-16 mx-auto text-primary/60 mb-6" />
           <h1 className="text-3xl font-bold text-foreground mb-4">
@@ -51,8 +48,11 @@ export default function HistorySection() {
           </h1>
           <p className="text-lg text-foreground/70">
             Пока нет данных о собеседованиях
-          </p>
-        </div>
+          </p>{" "}
+        </div>{" "}
+        <Link href={"/interview"} className="text-primary ">
+          Начать собеседование
+        </Link>{" "}
       </section>
     );
   }
@@ -60,9 +60,13 @@ export default function HistorySection() {
   const answeredQuestions = stages.reduce(
     (prevValue, currentStage) => {
       let allAnswered = 0;
+      let rights = 0;
       const answered = currentStage.questions.reduce(
         (prevQuestion, currentQuestion) => {
           allAnswered += 1;
+          if (currentQuestion.passed) {
+            rights += 1;
+          }
           if (currentQuestion.answerUser) {
             return prevQuestion + 1;
           } else {
@@ -75,15 +79,27 @@ export default function HistorySection() {
       return {
         all: prevValue.all + allAnswered,
         answered: answered + prevValue.answered,
+        rights: prevValue.rights + rights,
       };
     },
-    { all: 0, answered: 0 },
+    { all: 0, answered: 0, rights: 0 },
   );
 
   const completionPercentage =
     answeredQuestions.all > 0
       ? (answeredQuestions.answered / answeredQuestions.all) * 100
       : 0;
+  let status: "primary" | "warn" | "danger" = "danger";
+  const percentRights = Math.round(
+    (answeredQuestions.rights / answeredQuestions.all) * 100,
+  );
+  if (percentRights >= 70) {
+    status = "primary";
+  } else if (percentRights <= 50) {
+    status = "danger";
+  } else {
+    status = "warn";
+  }
 
   return (
     <section className="py-12 px-4 bg-background/50">
@@ -121,8 +137,17 @@ export default function HistorySection() {
                 </span>
                 <div className="p-4 bg-primary/10 text-4xl font-bold rounded-lg text-primary">
                   {answeredQuestions.all}
+                </div>{" "}
+                <div className="flex items-center justify-center gap-4">
+                  <p className="text-xl text-foreground/60 font-medium">
+                    правильных
+                  </p>
+                  <div
+                    className={`p-4 text-${status} bg-${status}/20 text-4xl font-bold rounded-lg `}>
+                    {answeredQuestions.rights}
+                  </div>
                 </div>
-              </div>
+              </div>{" "}
             </div>
 
             {/* Блок статуса прохождения */}
@@ -149,13 +174,13 @@ export default function HistorySection() {
               <span className="text-sm font-medium text-foreground">
                 Прогресс выполнения
               </span>
-              <span className="text-sm font-medium text-primary">
+              <span className={`text-sm font-medium text-${status}`}>
                 {Math.round(completionPercentage)}%
               </span>
             </div>
             <div className="w-full bg-foreground/10 rounded-full h-3 overflow-hidden">
               <div
-                className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
+                className={`h-full bg-${status} rounded-full transition-all duration-500 ease-out`}
                 style={{ width: `${completionPercentage}%` }}
               />
             </div>
@@ -173,6 +198,20 @@ export default function HistorySection() {
                 const stageTotal = stage.questions.length;
                 const stageProgress =
                   stageTotal > 0 ? (stageAnswered / stageTotal) * 100 : 0;
+                const questionRights = stage.questions.filter(
+                  (question) => question.passed,
+                ).length;
+                const percentQuestionRights = Math.round(
+                  (questionRights / stageTotal) * 100,
+                );
+                let statusQuestion = "primary";
+                if (percentRights >= 70) {
+                  statusQuestion = "primary";
+                } else if (percentRights <= 50) {
+                  statusQuestion = "danger";
+                } else {
+                  statusQuestion = "warn";
+                }
 
                 return (
                   <div
@@ -188,7 +227,7 @@ export default function HistorySection() {
                     </div>
                     <div className="w-full bg-foreground/10 rounded-full h-2 mt-2 overflow-hidden">
                       <div
-                        className="h-full bg-primary rounded-full transition-all duration-300"
+                        className={`h-full bg-${statusQuestion} rounded-full transition-all duration-300`}
                         style={{ width: `${stageProgress}%` }}
                       />
                     </div>
