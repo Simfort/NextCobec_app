@@ -54,7 +54,7 @@ describe("POST /api/interview", () => {
 
     const response = await POST(req);
     const data = await response.json();
-
+    console.log(data);
     expect(response.status).toBe(200);
     expect(data).toEqual(JSON.parse(mockCompletionContent));
     expect(mockOpenai.default.chat.completions.create).toHaveBeenCalled();

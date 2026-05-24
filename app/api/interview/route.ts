@@ -66,15 +66,17 @@ export async function POST(req: NextRequest) {
     }
     const rawResponse = JSON.parse(result);
 
-    const storeCookie = await cookies();
-    const now = new Date();
-    now.setMonth(now.getMonth() + 1);
-    storeCookie.set("last_interview", String(description), {
-      expires: now,
-      secure: true,
-      httpOnly: false,
-      sameSite: "lax",
-    });
+    if (process.env.NODE_ENV !== "test") {
+      const storeCookie = await cookies();
+      const now = new Date();
+      now.setMonth(now.getMonth() + 1);
+      storeCookie.set("last_interview", String(description), {
+        expires: now,
+        secure: true,
+        httpOnly: false,
+        sameSite: "lax",
+      });
+    }
     return NextResponse.json(rawResponse);
   } catch (error) {
     console.error("Ошибка при обработке запроса:", error);

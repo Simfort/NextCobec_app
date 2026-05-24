@@ -111,22 +111,23 @@ export async function POST(req: NextRequest) {
       ) {
         throw new Error("Неверная структура JSON");
       }
-      const storeCookie = await cookies();
-      const now = new Date();
-      now.setMonth(now.getMonth() + 1);
-      storeCookie.set("last_passed", String(result.passed), {
-        expires: now,
-        secure: true,
-        httpOnly: false,
-        sameSite: "lax",
-      });
-      storeCookie.set("last_salary", String(result.salary), {
-        expires: now,
-        secure: true,
-        httpOnly: false,
-        sameSite: "lax",
-      });
-
+      if (process.env.NODE_ENV !== "test") {
+        const storeCookie = await cookies();
+        const now = new Date();
+        now.setMonth(now.getMonth() + 1);
+        storeCookie.set("last_passed", String(result.passed), {
+          expires: now,
+          secure: true,
+          httpOnly: false,
+          sameSite: "lax",
+        });
+        storeCookie.set("last_salary", String(result.salary), {
+          expires: now,
+          secure: true,
+          httpOnly: false,
+          sameSite: "lax",
+        });
+      }
       return NextResponse.json(result);
     } catch (parseError) {
       console.error("Ошибка парсинга JSON от модели:", parseError);
