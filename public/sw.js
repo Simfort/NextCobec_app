@@ -25,42 +25,15 @@ self.addEventListener("install", (event) => {
 async function handlerFetch(event) {
   const req = event.request;
 
-  // Для навигации (HTML-страницы) — стратегия «сеть с откатом на кэш»
-  if (req.mode === "navigate") {
-    try {
-      const fetchResponse = await fetch(req);
-      event.waitUntil(putInCache(req, fetchResponse.clone()));
+  try {
+    const fetchResponse = await fetch(req);
+    event.waitUntil(putInCache(req, fetchResponse.clone()));
 
-      return fetchResponse;
-    } catch (error) {
-      const cachedResponse = await caches.match(req, { ignoreSearch: true });
-      return cachedResponse || caches.match("/");
-    }
+    return fetchResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(req, { ignoreSearch: true });
+    return cachedResponse || caches.match("/");
   }
-
-  // Для статических ресурсов Next.js (_next/static/) — кэшируем на лету
-  if (req.url.includes("/_next/static/")) {
-    const cachedResponse = await caches.match(req);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    try {
-      const fetchResponse = await fetch(req);
-      // Только успешные ответы (статус 200) кэшируем
-      if (fetchResponse.ok) {
-        event.waitUntil(putInCache(req, fetchResponse.clone()));
-      }
-      return fetchResponse;
-    } catch (error) {
-      // Если сеть недоступна и в кэше нет ресурса — возвращаем заглушку или ошибку
-      console.error("Failed to fetch and cache:", req.url, error);
-      return new Response("Resource not available offline", { status: 503 });
-    }
-  }
-
-  // Для остальных запросов — просто проксируем в сеть
-  return fetch(req);
 }
 
 self.addEventListener("fetch", (event) => {

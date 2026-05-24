@@ -139,12 +139,8 @@ export default function InterviewSection() {
     }
 
     try {
-      // Этап 1: очистка данных (10%)
-
       setProgress(10);
       await clearAllData();
-
-      // Этап 2: запрос к API (30%)
       setProgress(30);
       const res = await fetch("/api/interview", {
         method: "POST",
@@ -154,11 +150,8 @@ export default function InterviewSection() {
       const data = await res.json();
       console.log(data);
       setProgress(50);
-      // Этап 3: добавление данных в БД (50%)
-
       await addAll(data);
-      localStorage.setItem("last_interview", description);
-      // Завершение (100%)
+
       setProgress(100);
       router.push("/interview/view");
     } catch (error) {
@@ -172,7 +165,6 @@ export default function InterviewSection() {
     }
   };
 
-  // Очистка при размонтировании
   useEffect(() => {
     return () => {
       if (recognitionRef.current) {

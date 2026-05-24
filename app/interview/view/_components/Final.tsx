@@ -8,6 +8,7 @@ import InterviewSuccess from "./IntrerviewSuccess";
 import InterviewFailed from "./InterviewFailed";
 import useStatusNetwork from "@/lib/hooks/useStatusNetwork";
 import useStageControllerDB from "@/lib/hooks/useStageControllerDB";
+import useCookie from "@/lib/hooks/useCookie";
 
 export default function Final() {
   const { stages, setStages } = useStages();
@@ -15,12 +16,13 @@ export default function Final() {
   const [result, setResult] = useState<ResultInterview | null>(null);
   const isOffline = useStatusNetwork();
   const { addAll, clearAllData, isDBReady } = useStageControllerDB();
+  const cookies = useCookie<{ last_salary: string; last_passed: string }>();
   console.log(result);
   useEffect(() => {
     if (!isOffline && isDBReady) {
       if (!window) return;
-      const lastPassed = localStorage.getItem("last_passed");
-      const lastSalary = localStorage.getItem("last_salary");
+      const lastPassed = cookies.last_passed;
+      const lastSalary = cookies.last_salary;
 
       if (lastPassed && lastSalary && stages.length) {
         setResult({
@@ -39,13 +41,11 @@ export default function Final() {
             body: JSON.stringify({ stages: stages }),
           });
           const data: ResultInterview = await res.json();
-          console.log(data);
+
           setResult(data);
           await clearAllData();
           await addAll(data.stages);
           setStages(data.stages);
-          localStorage.setItem("last_passed", String(data.passed));
-          localStorage.setItem("last_salary", String(data.salary));
         } catch (error) {
           console.error(error);
         } finally {

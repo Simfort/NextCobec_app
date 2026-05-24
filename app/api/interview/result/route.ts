@@ -1,5 +1,6 @@
 import openai from "@/config/openai";
 import { ResultInterview, Stage } from "@/lib/types";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -110,6 +111,21 @@ export async function POST(req: NextRequest) {
       ) {
         throw new Error("Неверная структура JSON");
       }
+      const storeCookie = await cookies();
+      const now = new Date();
+      now.setMonth(now.getMonth() + 1);
+      storeCookie.set("last_passed", String(result.passed), {
+        expires: now,
+        secure: true,
+        httpOnly: false,
+        sameSite: "lax",
+      });
+      storeCookie.set("last_salary", String(result.salary), {
+        expires: now,
+        secure: true,
+        httpOnly: false,
+        sameSite: "lax",
+      });
 
       return NextResponse.json(result);
     } catch (parseError) {

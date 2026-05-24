@@ -1,4 +1,5 @@
 import openai from "@/config/openai";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -65,7 +66,15 @@ export async function POST(req: NextRequest) {
     }
     const rawResponse = JSON.parse(result);
 
-    // Возвращаем результат
+    const storeCookie = await cookies();
+    const now = new Date();
+    now.setMonth(now.getMonth() + 1);
+    storeCookie.set("last_interview", String(description), {
+      expires: now,
+      secure: true,
+      httpOnly: false,
+      sameSite: "lax",
+    });
     return NextResponse.json(rawResponse);
   } catch (error) {
     console.error("Ошибка при обработке запроса:", error);
