@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:sw": "tsc -p tsconfig.sw.json",
-    "build": "npm run build:sw && next build",
+    "build": " next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest"
