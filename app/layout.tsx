@@ -5,6 +5,7 @@ import Footer from "./_components/Footer";
 import Provider from "./Provider";
 import Script from "next/script";
 import Ads from "./_components/ADS";
+import AdsDekstop from "./_components/ADSDekstop";
 
 const geistSans = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -121,6 +122,7 @@ export default function RootLayout({
       </head>
       <body>
         <Ads blockId="R-A-19349016-1" />
+        <AdsDekstop blockId="R-A-19349016-2" />
         <Provider>{children}</Provider>
         <Footer />
       </body>
