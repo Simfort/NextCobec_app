@@ -2,6 +2,20 @@ declare global {
   interface Window {
     SpeechRecognition: typeof SpeechRecognition;
     webkitSpeechRecognition: typeof SpeechRecognition;
+    yaContextCb?: Array<() => void>;
+    Ya?: {
+      Context?: {
+        AdvManager?: {
+          render: (options: {
+            blockId: string;
+            renderTo: string;
+            async?: boolean;
+            // Другие возможные параметры
+            [key: string]: any;
+          }) => void;
+        };
+      };
+    };
   }
 
   interface SpeechRecognition extends EventTarget {
