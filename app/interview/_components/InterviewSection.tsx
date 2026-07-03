@@ -145,6 +145,7 @@ export default function InterviewSection() {
       const res = await fetch("/api/interview", {
         method: "POST",
         body: JSON.stringify({ description }),
+        keepalive: true,
       });
 
       const data = await res.json();

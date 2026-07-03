@@ -29,7 +29,7 @@ export default function StepBar({
     if (isAnswered) router.push(`?stage=${stageIndex}`);
   };
   return (
-    <section className="lg:px-20 max-sm:pt-15 max-sm:pb-2 max-sm:fixed  z-10 top-0 max-sm:bg-background max-sm:w-full  max-sm:flex max-sm:justify-center">
+    <section className="lg:px-20 max-sm:pt-15 max-sm:pb-2  z-10 top-0 max-sm:bg-background max-sm:w-full  max-sm:flex max-sm:justify-center">
       <div className="grid grid-cols-[60px_1fr] max-sm:flex max-sm:items-center ">
         {stages.map((stage, index) => (
           <Fragment key={index}>

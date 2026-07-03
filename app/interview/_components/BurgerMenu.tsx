@@ -49,7 +49,7 @@ export default function BurgerMenu() {
               </nav>{" "}
               <div className="p-6 mt-auto border-t border-accent/20">
                 <p className="text-sm text-foreground/60 text-center">
-                  © 2024 NextCobec. Все права защищены.
+                  © 2026 NextCobec. Все права защищены.
                 </p>
               </div>
             </motion.menu>

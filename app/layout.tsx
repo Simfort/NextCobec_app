@@ -3,9 +3,6 @@ import { Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import Footer from "./_components/Footer";
 import Provider from "./Provider";
-import Script from "next/script";
-import Ads from "./_components/ADS";
-import AdsDekstop from "./_components/ADSDekstop";
 
 const geistSans = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -104,25 +101,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${geistSans.variable} h-full antialiased`}>
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no"
-        />{" "}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.yaContextCb=window.yaContextCb||[]`,
-          }}
-        />
-        {/* Загрузка основного скрипта Яндекс.RTB */}
-        <Script
-          src="https://yandex.ru/ads/system/context.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <body>
-        <Ads blockId="R-A-19349016-1" />
-        <AdsDekstop blockId="R-A-19349016-2" />
         <Provider>{children}</Provider>
         <Footer />
       </body>

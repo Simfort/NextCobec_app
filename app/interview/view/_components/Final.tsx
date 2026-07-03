@@ -37,7 +37,7 @@ export default function Final() {
         try {
           const res = await fetch("/api/interview/result", {
             method: "POST",
-
+            keepalive: true,
             body: JSON.stringify({ stages: stages }),
           });
           const data: ResultInterview = await res.json();

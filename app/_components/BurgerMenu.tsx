@@ -16,11 +16,11 @@ export default function BurgerMenu() {
         {" "}
         {open && (
           <motion.menu
-            initial={{ x: 300 }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: 300 }}
+            exit={{ x: "100%" }}
             transition={{ duration: 0.5 }}
-            className=" flex flex-col right-0 z-10 h-full top-0 p-5 pt-10 fixed bg-secondary/90 gap-5 items-center">
+            className=" flex flex-col right-0 w-full z-10 h-full top-0 p-5 pt-10 fixed bg-secondary/90 gap-5 items-center">
             <h2 className="font-host-grotesk text-2xl">
               Next<span className="text-primary">Cobec</span>
             </h2>

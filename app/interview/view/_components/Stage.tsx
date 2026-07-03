@@ -75,12 +75,12 @@ export default function Stage({ stages }: { stages: IStage[] }) {
       </section>
     );
   return (
-    <section className="w-full h-screen gap-5 pt-50  bg-accent max-sm:pt-0 flex flex-col items-center justify-center">
+    <section className="w-full h-screen gap-5 pt-10  bg-accent max-sm:pt-0 flex flex-col items-center justify-center">
       <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="text-4xl max-sm:text-2xl text-center text-secondary">
+        className="text-4xl max-sm:text-2xl max-sm:px-1 text-center text-secondary">
         {stage.stage}
       </motion.h2>
       <div className="flex flex-col gap-5">

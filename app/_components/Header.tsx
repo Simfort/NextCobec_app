@@ -40,9 +40,6 @@ export default function Header() {
           Начать собеседование
         </Link>
       </nav>
-      <button className="border-primary text-primary border hover:text-background hover:bg-primary/80 active:opacity-50 transition-all cursor-pointer px-5 py-2 rounded-md">
-        Войти
-      </button>
     </header>
   );
 }
